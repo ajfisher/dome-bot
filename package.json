@@ -4,7 +4,6 @@
   "description": "Dome Robot control",
   "main": "index.js",
   "dependencies": {
-    "johnny-five": "^0.9.59",
     "node-pixel": "^0.6.1",
     "nodebots-interchange": "^1.1.1"
   },
