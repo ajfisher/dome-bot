@@ -42,7 +42,7 @@ boards.on("ready", function() {
 	ultrasonics = new five.Proximity.Collection({
 		pins: [8, 9, 10, 11],
 		controller: "HCSR04I2CBACKPACK",
-		freq: 500,
+		freq: 1000,
 		address: 0x27,
 	});
 	ultrasonics.on("data", function() {
