@@ -4,8 +4,11 @@
   "description": "Dome Robot control",
   "main": "index.js",
   "dependencies": {
+    "barcli": "0.0.23",
     "node-pixel": "^0.6.1",
-    "nodebots-interchange": "^1.1.1"
+    "nodebots-interchange": "^1.1.1",
+    "raspi-io": "^6.1.0",
+    "raspi-wiringpi": "^1.0.6"
   },
   "devDependencies": {},
   "scripts": {
