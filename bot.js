@@ -8,13 +8,32 @@ var l_servo, r_servo, line_array, ultrasonics, leds;
 var LSTOP = 93;
 var RSTOP = 94;
 
+var l_speed = {
+	f_slow: 0.1,
+	f_med: 0.2,
+	f_fast: 0.3,
+	r_slow: 0.2,
+	r_med: 0.3,
+	r_fast: 0.35,
+};
+var r_speed = {
+	f_slow: 0.1,
+	f_med: 0.2,
+	f_fast: 0.3,
+	r_slow: 0.2,
+	r_med: 0.3,
+	r_fast: 0.35,
+};
+
 var calibrating = true;
+var calibrate_time = 10000;
 
 var gfront = new Barcli({ label: "front", range: [0, 350]});
 var gback = new Barcli({ label: "back", range: [0, 350]});
 var gleft = new Barcli({ label: "left", range: [0, 350]});
 var gright = new Barcli({ label: "right", range: [0, 350]});
-var gline = new Barcli({label: "line", range: [0, 1001]});
+var gline = new Barcli({label: "line", range: [0, 5001]});
+
 
 var boards = new five.Boards([
 	{
@@ -29,7 +48,7 @@ var boards = new five.Boards([
 
 boards.on("ready", function() {
 
-	leds = new pixel.Strip({
+/**	leds = new pixel.Strip({
         	color_order: pixel.COLOR_ORDER.GRB,
 		address: 0x42,
         	board: this.byId("i2c"),
@@ -52,12 +71,13 @@ boards.on("ready", function() {
 		gleft.update(this[2].cm);
 		gright.update(this[3].cm);
   	});
+**/
 
 	line_array = new five.IR.Reflect.Array({
 		board: this.byId("usb"),
 	  	emitter: 13,
-	  	pins: ["A0", "A1",], // "A2", "A3"], // any number of pins
-	  	freq: 123
+	  	pins: ["A0", "A1", "A2", "A3", "A4", "A5"], // any number of pins
+	  	freq: 150
 	});
 
 	servo_l = new five.Servo.Continuous({
@@ -68,10 +88,10 @@ boards.on("ready", function() {
 		pin: 11,
 		board: this.byId("usb"),
 	});
-		servo_l.to(LSTOP);
-		servo_r.to(RSTOP);
+	servo_l.to(LSTOP);
+	servo_r.to(RSTOP);
 
-	console.info("Bot online. Calibrate sensors for 5 seconds");
+	console.info("Bot online. Calibrate sensors for 10 seconds");
 
 	line_array.calibrateUntil(function() {
 		return !calibrating;
@@ -80,7 +100,11 @@ boards.on("ready", function() {
 	setTimeout(function() {
 		calibrating = false;
 		console.log("Sensors calibrated, go for it");
-	}, 5000);
+
+		console.log("forward medium");
+		servo_l.ccw(l_speed.f_fast);
+		servo_r.ccw(r_speed.f_fast);
+	}, calibrate_time);
 
 	
     line_array.on('line', function() {
@@ -96,7 +120,7 @@ boards.on("ready", function() {
                 servo_l.ccw(0.1);
                 servo_r.ccw(0.1);
             }**/
-        }
+        }	
     });
 
 
